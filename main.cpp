@@ -60,7 +60,7 @@ int main(){
 	solVector=words;
 	while(true){
 		removeNonAnswers(solVector,inputSolution());
-		std::cout<<"Possible Answers:";
+		std::cout<<"Possible Answers:"<<std::endl;
 		for(unsigned int i=0;i<solVector.size();i++){
 			std::cout<<solVector[i]<<std::endl;
 		}
