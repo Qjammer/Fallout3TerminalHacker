@@ -63,6 +63,7 @@ class myInstance{
 				}
 			}
 			this->remainingWords=this->allWords;
+			this->printRemainingWords();
 		}
 		void getSolutions(){
 			mySolution retSol;
@@ -86,7 +87,7 @@ class myInstance{
 			std::cout<<"Score: The lower the better."<<std::endl;
 			for(unsigned int i=0;i<this->remainingWords.size();i++){
 				std::cout<<this->remainingWords[i].str;
-				std::cout<<":Score: ";
+				std::cout<<" Score: ";
 				std::cout<<this->remainingWords[i].calcScore(this->remainingWords)<<std::endl;
 			}
 		}
@@ -138,8 +139,5 @@ int similarity(const std::string& left,const std::string& right){
 int main(){
 	myInstance instance;
 	instance.getWords();
-	instance.remainingWords=instance.allWords;
-	instance.printRemainingWords();
-	
 	instance.getSolutions();
 }
