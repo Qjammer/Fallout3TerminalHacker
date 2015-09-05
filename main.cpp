@@ -4,14 +4,11 @@
 #include <cmath>
 #include <climits>
 
-class myWord;
 int similarity(const std::string& left,const std::string& right);
-void removeWord(std::string _str,std::vector<myWord>& vect);
 
 class myWord{
 	public:
 		std::string str;
-		int score;
 		std::vector<int> fragments(const std::vector<myWord>& vect) const{
 			std::vector<int> retVect(this->str.size()+1);
 			for (unsigned int i=0;i<vect.size();i++){
@@ -19,13 +16,12 @@ class myWord{
 			}
 			return retVect;
 		}
-		int calcScore(const std::vector<myWord>& vect){//The less the score, the better
+		int calcScore(const std::vector<myWord>& vect) const{//The less the score, the better
 			std::vector<int> fragVect = this->fragments(vect);
 			int scr=0;
 			for (unsigned int i=0;i<fragVect.size();i++){
 				scr+=pow(fragVect[i],2);
 			}
-			this->score=scr;
 			return scr;
 		}
 		myWord(std::string& _str): str(_str){}
@@ -83,7 +79,7 @@ class myInstance{
 				}
 			}
 		}
-		void printRemainingWords(){
+		void printRemainingWords() const{
 			std::cout<<"Score: The lower the better."<<std::endl;
 			for(unsigned int i=0;i<this->remainingWords.size();i++){
 				std::cout<<this->remainingWords[i].str;
@@ -134,7 +130,6 @@ int similarity(const std::string& left,const std::string& right){
 	}
 	return correctLetters;
 }
-
 
 int main(){
 	myInstance instance;
