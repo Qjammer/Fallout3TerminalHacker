@@ -46,11 +46,44 @@ class mySolution{
 
 class myInstance{
 	public:
-		int wordNumber;
 		std::vector<myWord> allWords;
 		std::vector<myWord> remainingWords;
 		std::vector<mySolution> checkedSolutions;
+		void getWords(){
+			std::string tword = "";
+			while (true) {
+				std::cout<<"Input possible word: ";
+				std::cin>>tword;
+				if(tword[0]=='.'){
+					break;
+				} else if(tword[0]=='-'){
+					this->removeWord(tword.substr(1,UINT_MAX));
+				} else {
+					allWords.push_back(myWord(tword));
+				}
+			}
+			this->remainingWords=this->allWords;
+		}
+		void getSolutions(){
+			mySolution retSol;
+			while(true){
+				std::cout<<"Input Solution Word: ";
+				std::cin>>retSol.str;
+				if (retSol.str[0]=='.'){
+					break;
+				} else if (retSol.str[0]=='-'){
+					this->removeSolution(retSol.str.substr(1,UINT_MAX));
+				} else {
+					std::cout<<"Input Correct Letters: ";
+					std::cin>>retSol.correct;
+					this->checkedSolutions.push_back(retSol);
+					this->checkSolutions();
+					this->printRemainingWords();
+				}
+			}
+		}
 		void printRemainingWords(){
+			std::cout<<"Score: The lower the better."<<std::endl;
 			for(unsigned int i=0;i<this->remainingWords.size();i++){
 				std::cout<<this->remainingWords[i].str;
 				std::cout<<":Score: ";
@@ -73,6 +106,22 @@ class myInstance{
 				}
 			}
 		}
+		void removeWord(std::string _str){
+			for(unsigned int i=0;i<this->allWords.size();i++){
+				if(_str==this->allWords[i].str){
+					this->allWords.erase(this->allWords.begin()+i);
+					return;
+				}
+			}
+		}
+		void removeSolution(std::string _str){
+			for(unsigned int i=0;i<this->checkedSolutions.size();i++){
+				if(_str==this->checkedSolutions[i].str){
+					this->checkedSolutions.erase(this->checkedSolutions.begin()+i);
+					return;
+				}
+			}
+		}
 };
 
 int similarity(const std::string& left,const std::string& right){
@@ -85,71 +134,12 @@ int similarity(const std::string& left,const std::string& right){
 	return correctLetters;
 }
 
-void getWords(std::vector<myWord>& words){
-	std::string tword = "";
-	while (true) {
-		std::cout<<"Input possible word: ";
-		std::cin>>tword;
-		if(tword[0]=='.'){
-			break;
-		} else if(tword[0]=='-'){
-			removeWord(tword.substr(1,UINT_MAX),words);
-		} else {
-			words.push_back(myWord(tword));
-		}
-	}
-}
-
-void removeWord(std::string _str,std::vector<myWord>& vect){
-	for(unsigned int i=0;i<vect.size();i++){
-		if(_str==vect[i].str){
-			vect.erase(vect.begin()+i);
-			return;
-		}
-	}
-}
-
-void removeSolution(std::string _str,std::vector<mySolution>& vect){
-	for(unsigned int i=0;i<vect.size();i++){
-		if(_str==vect[i].str){
-			vect.erase(vect.begin()+i);
-			return;
-		}
-	}
-}
-
-mySolution inputSolution(){
-	mySolution retSol;
-	std::cout<<"Input Solution Word: ";
-	std::cin>>retSol.str;
-	if (retSol.str[0]=='.'){
-		retSol.correct=0;
-	} else if (retSol.str[0]=='-'){
-		retSol.correct=0;
-	} else {
-		std::cout<<"Input Correct Letters: ";
-		std::cin>>retSol.correct;
-	}
-	return retSol;
-}
 
 int main(){
 	myInstance instance;
-	getWords(instance.allWords);
+	instance.getWords();
 	instance.remainingWords=instance.allWords;
 	instance.printRemainingWords();
-
-	mySolution tempSol;
-	while (true){
-		tempSol = inputSolution();
-		if (tempSol.str[0]=='-'){
-			removeSolution(tempSol.str.substr(1,UINT_MAX),instance.checkedSolutions);
-		} else if (tempSol.str[0]=='.'){
-			return 0;
-		} else {
-			instance.checkedSolutions.push_back(tempSol);
-			instance.checkSolutions();
-			instance.printRemainingWords();
-		}
-	}
+	
+	instance.getSolutions();
 }
